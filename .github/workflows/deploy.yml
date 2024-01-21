@@ -1,0 +1,30 @@
+name: WordPress Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 3.110.119.180 >> ~/.ssh/known_hosts
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rsync
+
+      - name: Deploy WordPress
+        run: |
+          rsync -r --delete-after --quiet $GITHUB_WORKSPACE/ ujeb@3.110.119.180:/var/www/html/wordpress
