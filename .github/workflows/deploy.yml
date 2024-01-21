@@ -19,8 +19,8 @@ jobs:
 
       - name: Deploy WordPress
         run: |
-          rsync -r --delete-after --quiet $GITHUB_WORKSPACE/ ujeb@3.110.119.180:/var/www/html/wordpress
-          ssh ujeb@@3.110.119.180 "sudo chown -R www-data:www-data /var/www/html/wordpres"
-          ssh ujeb@3.110.119.180 "sudo chown -R 755 /var/www/html/wordpress"
+          sudo  rsync -r --delete-after --quiet $GITHUB_WORKSPACE/ ujeb@3.110.119.180:/var/www/html/wordpress
+          ssh ujeb@@3.110.119.180 "sudo chown -R www-data:www-data /var/www/html/wordpress"
+          sudo ssh ujeb@3.110.119.180 "sudo chown -R 755 /var/www/html/wordpress"
           ssh ujeb@3.110.119.180 "sudo systemctl restart nginx php8.1-fpm"
           
